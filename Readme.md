@@ -41,4 +41,4 @@ This will start the project in dev environment.
 
 #### Coverage Report
 
-![alt text](https://github.com/fengo4142/rolandsong-example-app/master/coverage.jpg?raw=true)
+![alt text](https://user-images.githubusercontent.com/50028639/84891070-97b71900-b09b-11ea-8822-71f22679f5b3.jpg)
