@@ -1,5 +1,6 @@
 import db from '../models'
 
+// list rdfs
 export const getRdfs = async (req, res) => {
 
 	try {
@@ -11,6 +12,7 @@ export const getRdfs = async (req, res) => {
 				{ publicationDate: db.Sequelize.where(db.Sequelize.fn('LOWER', db.Sequelize.col('publicationDate')), 'LIKE', '%' + searchKey.toLowerCase() + '%') }
 			)
 		}
+
 		const rdfs = await db.Rdf.findAll(cond)
 		return res.json({ result: 'success', data: rdfs })
 	} catch (err) {

@@ -6,6 +6,7 @@ import xml2js from 'xml2js'
 const readFile = util.promisify(fs.readFile)
 const parser = new xml2js.Parser()
 
+// extract attributes needed from json data parsed by xml2js parser
 export const extractBook = (data) => {
 	try {
 		const book = data['rdf:RDF']['pgterms:ebook'].shift()
@@ -27,6 +28,7 @@ export const extractBook = (data) => {
 	}
 }
 
+// read from a certain file and parse
 export const readFromFile = (filepath) => {
 	parser.reset()
 	return new Promise((resolve, reject) => {
@@ -42,21 +44,22 @@ export const readFromFile = (filepath) => {
 	})
 }
 
+// read from directory (can be directores which contain files directory or sub directories)
 export const readFromDirectory = (dirpath) => {
 	return new Promise((resolve, reject) => {
 		fs.readdir(dirpath, function (err, items) {
 			if (err) {
 				return console.log('Unable to scan directory: ' + err)
 			}
-			//listing all files using forEach
-			items = items.length > 1 ? items.slice(0, 100).reduce((acc, cur) => {  
+			//listing all files using forEach (only files named with digits allowed)
+			items = items.length > 1 ? items.reduce((acc, cur) => {  
 				if (/^[0-9]{1,10}$/.test(cur)) 
 					acc.push(cur)
 				return acc 
 			}, []) : items
 
       
-			const fnArr = items.map((item) => {
+			const promiseArr = items.map((item) => {
 				parser.reset() 
 				const filepath = !fs.lstatSync(dirpath + item).isDirectory() ? `${dirpath}${item}` : `${dirpath}${item}/pg${item}.rdf`
 				return readFile(filepath, 'utf-8').then(file => 
@@ -68,7 +71,7 @@ export const readFromDirectory = (dirpath) => {
 				})
 			})
 
-			Promise.all(fnArr).then(response => {
+			Promise.all(promiseArr).then(response => {
 				resolve(response)
 			})
 		})

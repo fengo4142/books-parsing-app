@@ -27,7 +27,8 @@ export default (sequelize, dataTypes) => {
 			type: dataTypes.STRING
 		}
 	}
-
+  
+	// indexs for search
 	const indexs = {
 		indexes:[
 			{

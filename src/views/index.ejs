@@ -21,10 +21,12 @@
 </div>
 
 <script>
+  // dom elements
   const contentArea = document.querySelector('.contentArea')
   const readBtn = document.querySelector('#readFiles');
   const searchInput =  document.querySelector('#searchKey')
 
+  // search func
   const search = (event) => {
     event.preventDefault();
     
@@ -54,6 +56,7 @@
     })
   }
 
+  // bind events
   readBtn.addEventListener('click', search)
   searchInput.addEventListener('keydown', event => {
     if (event.which === 13) {
