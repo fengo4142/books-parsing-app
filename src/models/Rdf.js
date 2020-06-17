@@ -1,4 +1,4 @@
-export const RdfFactory = (sequelize, dataTypes) => {
+export default (sequelize, dataTypes) => {
   const attrs = {
     id: {
       type: dataTypes.STRING,

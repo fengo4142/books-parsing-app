@@ -1,13 +1,16 @@
 import dotenv from 'dotenv'
-dotenv.config()
 import express from 'express'
+import path from 'path'
+
 import routes from './routers'
-import { registerModels } from './models'
-import sequelizeConfig from './config/sequelizeConfig'
+import db from './models'
+dotenv.config()
+
 
 // sequelize setup
-const db = registerModels(sequelizeConfig);
-db.sequelize.sync()
+db.sequelize.sync({ force: true }).then(() => {
+  console.log('synced')
+})
 
 
 // app's init
@@ -15,6 +18,7 @@ const app = express()
 
 app.use(express.json());
 app.use('/public', express.static(process.cwd() + '/public'));
+app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'ejs');
 
 app.use('/', routes)
