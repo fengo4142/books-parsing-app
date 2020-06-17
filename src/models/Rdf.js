@@ -28,7 +28,15 @@ export default (sequelize, dataTypes) => {
 		}
 	}
 
-	const Rdf = sequelize.define('Rdf', attrs)
+	const indexs = {
+		indexes:[
+			{
+				fields:['id', 'title', 'author', 'publicationDate']
+			}
+		]
+	}
+	
+	const Rdf = sequelize.define('Rdf', attrs, indexs)
 
 	return Rdf
 }

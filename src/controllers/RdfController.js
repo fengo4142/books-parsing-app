@@ -1,8 +1,6 @@
-import { readFromFile, readFromDirectory } from '../utils'
-import appRoot from 'app-root-path'
 import db from '../models'
 
-export const getRdfs = async (req, res, next) => {
+export const getRdfs = async (req, res) => {
 
 	try {
 		const { searchKey } = req.query
@@ -17,30 +15,7 @@ export const getRdfs = async (req, res, next) => {
 		return res.json({ result: 'success', data: rdfs })
 	} catch (err) {
 		console.log(err)
-		return res.status(500).json({ result: 'error', error: err })
+		return res.json({ result: 'error', error: err })
 	}
 
-}
-
-export const postReadRdf = async (req, res, next) => {
-	try {
-		const path = appRoot + '/cache/epub/'
-		const result = await readFromFile(path)
-		return res.json({ result: 'success', data: result })
-	} catch (err) {
-		return res.status(500).json({ result: 'error', error: JSON.stringify(err) })
-	}
-}
-
-export const postMultiReadRdf = async (req, res, next) => {
-	try {
-		const path = appRoot + '/cache/epub/'
-		const result = await readFromDirectory(path)
-		result.forEach(async item => {
-			await db.Rdf.create(item)
-		})
-		return res.json({ result: 'success', data: result })
-	} catch (err) {
-		return res.status(500).json({ result: 'error', error: JSON.stringify(err) })
-	}
 }
