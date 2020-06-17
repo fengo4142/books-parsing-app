@@ -1,20 +1,66 @@
+<html>
 <meta charset="UTF-8">
 <title>Example</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 <style>
     body { padding-top: 50px; }
 </style>
-
+<body>
 <div class="container">
   <div class="form-group">
-    <button class="btn">Read from Files</button>
+    <button class="btn" id="readFiles">Read from Files</button>
   </div>
   <div class="form-group">
     <label>Search:</label>
-    <input type="text" class="form-control" id="searchForm" />
+    <input type="text" class="form-control" id="searchKey" />
   </div>
-  <div class="content border">
+  <div class="contentArea border">
 
   </div>
 
 </div>
+
+<script>
+  const contentArea = document.querySelector('.contentArea')
+  const readBtn = document.querySelector('#readFiles');
+  const searchInput =  document.querySelector('#searchKey')
+
+  const search = (event) => {
+    event.preventDefault();
+    
+    const searchKey = searchInput.value
+    const url =  new URL(`${window.location.href}rdfs/`)
+    url.searchParams.append('searchKey', searchKey)
+    contentArea.innerHTML = ""
+
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'
+      }
+    }).then((response) => {
+      return response.json()
+    }).then((json) => {
+      const { result, data } = json;
+      data.map(item => {
+        const div = document.createElement(`div`)
+        const txt = document.createTextNode(`${item.title}`)
+        div.appendChild(txt)
+        contentArea.appendChild(div)
+      })
+    }).catch((err) => {
+      console.log('Failed', err)
+    })
+  }
+
+  readBtn.addEventListener('click', search)
+  searchInput.addEventListener('keydown', event => {
+    if (event.which === 13) {
+      search(event)
+    }
+  })
+
+</script>
+</body>
+</html>
